@@ -54,3 +54,9 @@ unusual
 #The below code will allow me to change the outliers with missing values since I can't explain them
 diamonds2 <- diamonds %>% 
   mutate(y=ifelse(y<3 | y >20, NA,y))
+#plot the diamonds2 dataset, that has taken out the outliers
+ggplot(data = diamonds2, mapping = aes(x = x, y = y)) + 
+  geom_point()
+#It took me a second to realize what I was looking at, as my first thought was "Why is there still that outlier at zero?"
+#then I realized I filter on y not on x:)
+
