@@ -5,6 +5,10 @@
 library(tidyverse)
 #basic summary of data
 summary(diamonds)
+#Which values are the most common? Why. Premium cuts are the most common, possibly because they are the easiest to mark-up
+diamonds %>% count(cut)
+#Which values are rare? Why? Does that match your expectations? No I expected fair diamonds to be the most common
+#Can you see any unusual patterns? What might explain them?
 #see structure of data
 str(diamonds)
 #simple bar chart w/ cut
@@ -14,6 +18,7 @@ ggplot(data = diamonds) +
 ggplot(data = diamonds) + 
   geom_bar(mapping=aes(x=color))
 #simple bar chart w/ clarity
+#Can you see any unusual patterns? What might explain them?
 ggplot(data = diamonds) + 
   geom_bar(mapping=aes(x=clarity))
 # the distribution with clarity looks skewed. The data is definitely right-tailed.
@@ -36,6 +41,9 @@ dfnumberOfDiamondsPerClarityGroup
 #The below lines of code showed a different type of graph I had not used before so I wanted to run it.
 smaller <- diamonds %>% 
   filter(carat < 3)
+#How are the observations within each cluster similar to each other?
+#How are the observations in separate clusters different from each other?
+#How can you explain or describe the clusters?
 ggplot(data = smaller, mapping = aes(x = carat)) +
   geom_histogram(binwidth = 0.1)
 ggplot(data = smaller, mapping = aes(x = carat, colour = cut)) +
@@ -45,6 +53,7 @@ ggplot(diamonds) +
   geom_histogram(mapping = aes(x = y), binwidth = 0.5) +
   coord_cartesian(ylim = c(0, 50))
 #The below code will allow us to view the individual outlier data points
+#Why might the appearance of clusters be misleading? They could be simple data entry errors.
 unusual <- diamonds %>% 
   filter(y < 3 | y > 20) %>% 
   select(price, x, y, z) %>%
@@ -61,7 +70,29 @@ ggplot(data = diamonds2, mapping = aes(x = x, y = y)) +
 #then I realized I filter on y not on x:)
 # the below line of code standardizes the count so we can easier see a comparison of distributions.
 #What is this  "..density.."syntax? I do not feel I understand density as well as I should
+#Could this pattern be due to coincidence (i.e. random chance)? I guess there is always a chance it vould be random, but what is the probability.
+#How can you describe the relationship implied by the pattern? positive linear
+#How strong is the relationship implied by the pattern? strong
 ggplot(data = diamonds, mapping = aes(x = price, y = ..density..)) + 
   geom_freqpoly(mapping = aes(colour = cut), binwidth = 500)
 #review data
 str(diamonds)
+#box plot to more effectively see outliers
+ggplot(data = diamonds, mapping = aes(x = cut, y = price)) +
+  geom_boxplot() +
+  coord_flip()
+numberOfFairDiamonds <- as.data.frame(diamonds %>% count(cut) %>% select(n))
+#Interesting that the fair cut has a lot of outliers.
+numberOfFairDiamonds
+str(numberOfFairDiamonds)
+#I want the number of fair diamonds in it's own data set since I would like to graph it
+numberOfFairDiamonds1 <- numberOfFairDiamonds[1,]
+numberOfFairDiamonds1
+#can I graph this?
+#They showed this in the book and it looks interesting
+#Does the relationship change if you look at individual subgroups of the data?
+ggplot(data = diamonds) +
+  geom_count(mapping = aes(x = cut, y = color))
+#What other variables might affect the relationship?
+#clarity 
+  
