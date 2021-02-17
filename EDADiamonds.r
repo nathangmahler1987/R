@@ -59,4 +59,9 @@ ggplot(data = diamonds2, mapping = aes(x = x, y = y)) +
   geom_point()
 #It took me a second to realize what I was looking at, as my first thought was "Why is there still that outlier at zero?"
 #then I realized I filter on y not on x:)
-
+# the below line of code standardizes the count so we can easier see a comparison of distributions.
+#What is this  "..density.."syntax? I do not feel I understand density as well as I should
+ggplot(data = diamonds, mapping = aes(x = price, y = ..density..)) + 
+  geom_freqpoly(mapping = aes(colour = cut), binwidth = 500)
+#review data
+str(diamonds)
